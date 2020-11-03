@@ -46,6 +46,8 @@ export default {
                         localStorage.setItem('userID', res.data.user_id)
                         localStorage.setItem('isCompanion', res.data.userIsCompanion)
                         localStorage.setItem('isClient', res.data.userIsClient)
+                        localStorage.setItem('userPhoneNumber', res.data.userPhoneNumber)
+                        localStorage.setItem('userFullName', res.data.userFullName)
                         if (res.data.userIsCompanion === true && res.data.userIsClient === false) {
                             this.$router.push('/companionHome/orders').catch(() => {})
                         } else {

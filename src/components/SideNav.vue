@@ -57,98 +57,98 @@ export default {
             userPhoneNumber: ''
         }
     },
-    // mounted() {
-    //     document.querySelector('.companion').style.display = 'none'
-    //     document.querySelector('.client').style.display = 'none'
-    //     if (localStorage.getItem('token') !== null) {
-    //         this.getUser()
-    //     }
-    // },
-    // methods: {
-    //     logout() {
-    //         localStorage.clear()
-    //         this.$router.push('/login')
-    //     },
-    //     getUser() {
-    //         axios.get('api/userData', {
-    //                 headers: {
-    //                     token: localStorage.getItem('token')
-    //                 }
-    //             })
-    //             .then((res) => {
-    //                 console.log(res.data.user)
-    //                 const user = res.data.user
-    //                 this.userPhoneNumber = user.phoneNumber
-    //                 if (res.data.user.isCompanion === true && res.data.user.isClient === false) {
-    //                     document.querySelector('.companion').style.display = 'none'
-    //                     document.querySelector('.client').style.display = 'block'
-    //                 } else {
-    //                     document.querySelector('.companion').style.display = 'block'
-    //                     document.querySelector('.client').style.display = 'none'
-    //                 }
-    //             })
-    //     },
-    //     becomeCompanion() {
-    //         localStorage.removeItem('isCompanion')
-    //         localStorage.removeItem('isClient')
-    //         const cc = {
-    //             isCompanion: true,
-    //             isClient: false
-    //         }
-    //         axios.post('api/becomeCompanion', cc, {
-    //                 headers: {
-    //                     token: localStorage.getItem('token'),
-    //                     userid: localStorage.getItem('userID')
-    //                 }
-    //             })
-    //             .then(res => {
-    //                 if (res.status === 200) {
-    //                     console.log('You become a companion')
-    //                     localStorage.setItem('isCompanion', cc.isCompanion)
-    //                     localStorage.setItem('isClient', cc.isClient)
-    //                     this.$router.push('/companionHome/orders')
-    //                 } else {
-    //                     console.log('You dont able to a companion')
-    //                 }
-    //             })
-    //             .then(() => {
-    //                 this.isCompanion = true
-    //                 this.isClient = false
-    //                 document.querySelector('.companion').style.display = 'none'
-    //                 document.querySelector('.client').style.display = 'block'
-    //             })
-    //     },
-    //     becomeClient() {
-    //         localStorage.removeItem('isCompanion')
-    //         localStorage.removeItem('isClient')
-    //         const cc = {
-    //             isCompanion: false,
-    //             isClient: true
-    //         }
-    //         axios.post('api/becomeClient', cc, {
-    //                 headers: {
-    //                     token: localStorage.getItem('token'),
-    //                     userid: localStorage.getItem('userID')
-    //                 }
-    //             })
-    //             .then(res => {
-    //                 if (res.status === 200) {
-    //                     console.log('You become a client')
-    //                     localStorage.setItem('isCompanion', cc.isCompanion)
-    //                     localStorage.setItem('isClient', cc.isClient)
-    //                     this.$router.push('/')
-    //                 } else {
-    //                     console.log('You become a companion')
-    //                 }
-    //             })
-    //             .then(() => {
-    //                 this.isCompanion = false
-    //                 this.isClient = true
-    //                 document.querySelector('.client').style.display = 'none'
-    //                 document.querySelector('.companion').style.display = 'block'
-    //             })
-    //     }
-    // }
+    mounted() {
+        document.querySelector('.companion').style.display = 'none'
+        document.querySelector('.client').style.display = 'none'
+        if (localStorage.getItem('token') !== null) {
+            this.getUser()
+        }
+    },
+    methods: {
+        logout() {
+            localStorage.clear()
+            this.$router.push('/login')
+        },
+        getUser() {
+            axios.get('api/userData', {
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data.user)
+                    const user = res.data.user
+                    this.userPhoneNumber = user.phoneNumber
+                    if (res.data.user.isCompanion === true && res.data.user.isClient === false) {
+                        document.querySelector('.companion').style.display = 'none'
+                        document.querySelector('.client').style.display = 'block'
+                    } else {
+                        document.querySelector('.companion').style.display = 'block'
+                        document.querySelector('.client').style.display = 'none'
+                    }
+                })
+        },
+        becomeCompanion() {
+            localStorage.removeItem('isCompanion')
+            localStorage.removeItem('isClient')
+            const cc = {
+                isCompanion: true,
+                isClient: false
+            }
+            axios.post('api/becomeCompanion', cc, {
+                    headers: {
+                        token: localStorage.getItem('token'),
+                        userid: localStorage.getItem('userID')
+                    }
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log('You become a companion')
+                        localStorage.setItem('isCompanion', cc.isCompanion)
+                        localStorage.setItem('isClient', cc.isClient)
+                        this.$router.push('/companionHome/orders')
+                    } else {
+                        console.log('You dont able to a companion')
+                    }
+                })
+                .then(() => {
+                    this.isCompanion = true
+                    this.isClient = false
+                    document.querySelector('.companion').style.display = 'none'
+                    document.querySelector('.client').style.display = 'block'
+                })
+        },
+        becomeClient() {
+            localStorage.removeItem('isCompanion')
+            localStorage.removeItem('isClient')
+            const cc = {
+                isCompanion: false,
+                isClient: true
+            }
+            axios.post('api/becomeClient', cc, {
+                    headers: {
+                        token: localStorage.getItem('token'),
+                        userid: localStorage.getItem('userID')
+                    }
+                })
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log('You become a client')
+                        localStorage.setItem('isCompanion', cc.isCompanion)
+                        localStorage.setItem('isClient', cc.isClient)
+                        this.$router.push('/')
+                    } else {
+                        console.log('You become a companion')
+                    }
+                })
+                .then(() => {
+                    this.isCompanion = false
+                    this.isClient = true
+                    document.querySelector('.client').style.display = 'none'
+                    document.querySelector('.companion').style.display = 'block'
+                })
+        }
+    }
 }
 </script>
 

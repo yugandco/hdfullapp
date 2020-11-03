@@ -35,9 +35,10 @@ export default {
     },
     methods: {
         getUser() {
-            axios.get('api/userData', {
+            const token = localStorage.getItem('token')
+            axios.get(`api/userData/`, {
                     headers: {
-                        token: localStorage.getItem('token')
+                        token: token
                     }
                 })
                 .then((res) => {
@@ -50,7 +51,8 @@ export default {
             localStorage.clear()
             this.$router.push('/login')
         }
-    }
+    },
+
 }
 </script>
 

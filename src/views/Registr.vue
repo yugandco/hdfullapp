@@ -7,6 +7,8 @@
         </div>
         <div class="registrForm">
             <form @submit.prevent='submitForm' id='registrForm' methods='post' action='/registr'>
+                <input type="text" class='form-control' name='firstName' placeholder="Имя" v-model='firstName'>
+                <input type="text" class='form-control' name='lastName' placeholder="Фамилия" v-model='lastName'>
                 <input @change='checkInput' id='phoneNumber' class="form-control" type="text" name="phoneNumber" placeholder="Номер телефона" v-model='phoneNumber'>
                 <input @change='checkPassword' id='password' type="text" class="form-control" name='password' placeholder="Введите пароль" v-model='password'>
                 <p class="passwordRequirment">Пароль должен состоять более 8 символов, используйте Большие буквы и цифры.</p>
@@ -34,6 +36,8 @@ export default {
     name: 'Registr',
     data() {
         return {
+            firstName: '',
+            lastName: '',
             phoneNumber: '',
             password: '',
             terms: '',
@@ -95,6 +99,8 @@ export default {
         },
         handleRegistrSubmit() {
             const newUser = {
+                firstName: this.firstName,
+                lastName: this.lastName,
                 phoneNumber: this.phoneNumber,
                 password: this.password,
                 terms: this.terms

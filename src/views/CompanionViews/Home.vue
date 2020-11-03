@@ -1,7 +1,20 @@
 <template>
 <div id='companion' class="home mt-5 pt-4">
     <div class="container-fluid">
-        <div class="home__title h1 mb-0 border-bottom font-weight-bold pb-3">Поиск посылок</div>
+        <div class="home__title border-bottom pb-3">
+            <span class='font-weight-bold' style='font-size: 30px'>Поиск посылок</span>
+            <span class='float-right'>
+                <div class="dropdown">
+                    <button style='height:50px' class="btn btn-light d-flex align-items-center rounded-circle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false">
+                        <i class='material-icons'>more_vert</i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="dropdownMenuButton2">
+                        <li class="dropdown-item">Все заказы</li>
+                        <li class="dropdown-item">Another action</li>
+                    </ul>
+                </div>
+            </span>
+        </div>
         <div class="home__body mt-3">
             <div class="row">
                 <div class="col-6">

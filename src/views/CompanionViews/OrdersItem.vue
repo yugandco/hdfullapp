@@ -1,5 +1,5 @@
 <template>
-<div id='ordersItem' class="col-sm-12 p-0">
+<div id='ordersItem' class="col-sm-12 p-0" v-if='orderdata.companion.deliveryStatus.isResponded.status === false'>
     <div class="card">
         <div class="row g-0">
             <div class="col-3 d-flex justify-content-center pt-3">
@@ -15,13 +15,17 @@
             </div>
         </div>
         <div class="card-footer">
-            <button @click='openAcceptedModal' class='btn btn-primary float-right'>Смогу забрать</button>
+            <button class='btn btn-success d-flex align-items-center float-right' style='display: none!important'>
+                Заявка подана <i class='material-icons ml-2'>done_outline</i>
+            </button>
+            <button @click='openAcceptedModal()' :id='orderdata._id' class='btn btn-primary float-right'>Смогу забрать</button>
         </div>
     </div>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
 import moment from 'moment'
 export default {
     name: 'OrdersItem',
@@ -33,12 +37,27 @@ export default {
             }
         }
     },
+    data() {
+        return {
+            isShow: false
+        }
+    },
+    created() {
+        this.orderdata.counterOfApplicationsFromCompanions.forEach(data => {
+            if (data.companionid === localStorage.getItem('userID')) {
+                this.isShow
+            } else {
+                this.isShow = true
+            }
+        })
+    },
+    mounted() {},
     methods: {
         moment(date) {
             return moment(date)
         },
-        openAcceptedModal() {
-            this.$emit('openAcceptedModal')
+        openAcceptedModal(id) {
+            this.$emit('openAcceptedModal', id)
         }
     },
     filters: {

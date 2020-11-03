@@ -4,6 +4,7 @@
         <div class='history__title h1 mb-0 font-weight-bold border-bottom pb-3'>Мои заказы</div>
         <div class="history__body mb-5" style='overflow-y: scroll; overflow-x: hidden; height: 78vh;'>
             <div class="row mb-5 gy-2">
+                <!-- All Data comes from client when pushed new search -->
                 <div class="col-sm-12 mt-3" v-for='(order, index) in orders' :key='index'>
                     <div class="card">
                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -32,14 +33,19 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <div class='text-center mb-3 pb-2 font-weight-bold border-bottom'>Заявки от:</div>
-                            <div class="d-flex mb-2">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button class='btn btn-light btn-block'>Меня <span class='badge bg-danger' style=''>0</span></button>
-                                    </div>
-                                    <div class="col-6">
-                                        <button class='btn btn-dark btn-block m-0'>Попутчиков <span class='badge bg-danger' style=''>10</span></button>
+                            <div v-if='order.companion.deliveryStatus.isDelivered.text === "Посылка доставлена"' class='card-text'>Попутчик доставил вашу посылку</div>
+                            <div v-else>
+                                <div class='text-center mb-3 pb-2 font-weight-bold border-bottom'>Заявки от:</div>
+                                <div class="d-flex mb-2">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <!--  -->
+                                            <button @click='openAppFromMe(order._id)' class='btn btn-light btn-block'>Меня <span class='badge bg-danger' style=''></span></button>
+                                        </div>
+                                        <div class="col-6">
+                                            <!--  -->
+                                            <button @click='openAppFromCompanions(order._id)' class='btn btn-dark btn-block m-0'>Попутчиков <span class='badge bg-danger' style=''></span></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -55,26 +61,31 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
-// import Applications from './Applications.vue'
 
 export default {
     name: 'History',
-    components: {
-        // Applications
-    },
+    components: {},
     created() {
         this.updateData()
     },
     data() {
         return {
             orders: [],
-            isShowApplication: false
+            isShowApplication: false,
         }
     },
-    mounted() {
-
-    },
+    mounted() {},
     methods: {
+        openAppFromMe(id) {
+            console.log(id)
+            localStorage.setItem('clientOrderID', id)
+            this.$router.push('/client-applications-from-me').catch(() => {})
+        },
+        openAppFromCompanions(id) {
+            console.log(id)
+            localStorage.setItem('clientOrderID', id)
+            this.$router.push('/client-applications-from-companions').catch(() => {})
+        },
         closeApplications() {
             this.isShowApplication === true ? this.isShowApplication = false : this.isShowApplication
         },
@@ -85,11 +96,8 @@ export default {
             return moment(date)
         },
         updateData() {
-            axios.get('api/history', {
-                    headers: {
-                        userid: localStorage.getItem('userID')
-                    }
-                })
+            const userid = localStorage.getItem('userID')
+            axios.get(`api/history/${userid}`)
                 .then(res => {
                     res.status === 200 ? console.log(res) : console.log('Error')
                     const datas = res.data.clients

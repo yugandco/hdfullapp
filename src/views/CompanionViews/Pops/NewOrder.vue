@@ -184,6 +184,7 @@ export default {
                     if (this.ads.from === '' || this.ads.to === '' || this.ads.price === '' || this.ads.date === '' || this.ads.typePackage === '' || this.ads.typeTransport === '') {
                         console.log('Пожалуйста заполните все данные...')
                     } else {
+                        localStorage.setItem('searchCompanion', JSON.stringify(ads))
                         this.$router.push('/companionHome/orders').catch(() => {})
                     }
                 })

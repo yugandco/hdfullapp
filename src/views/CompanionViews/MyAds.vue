@@ -46,7 +46,7 @@ export default {
         getAds() {
             axios.get('api/companionHome/myads', {
                     headers: {
-                        token: localStorage.getItem('toke'),
+                        token: localStorage.getItem('token'),
                         userid: localStorage.getItem('userID')
                     }
                 })

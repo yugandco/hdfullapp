@@ -24,8 +24,17 @@
             <p class='card-text mb-0 text-muted'>Цена: <span class='font-weight-bold'>{{addata.price}} тг.</span></p>
             <p class='card-text mb-0 text-muted'>Время: <span class='font-weight-bold'>{{addata.date | moment(addata.date)}}</span></p>
         </div>
-        <div class="card-footer">
-            Заявки от клиентов: <span class='badge' style='background-color: #009ffa'>0</span></div>
+        <div class="card-footer text-center">
+            <div class='border-bottom mt-2 pb-3 font-weight-bold'>Заявки от:</div>
+            <div class="row mt-3 pb-2">
+                <div class="col">
+                    <button @click='openAppFromMe(addata._id)' class='btn btn-outline-secondary btn-block'>Меня <span class='badge bg-danger' style=''></span></button>
+                </div>
+                <div class="col">
+                    <button @click='openAppFromClients(addata._id)' class='btn btn-dark btn-block'>Клиентов <span class='badge bg-danger' style=''></span></button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -46,11 +55,21 @@ export default {
     methods: {
         moment(date) {
             return moment(date)
+        },
+        openAppFromClients(id) {
+            console.log(id)
+            localStorage.setItem('orderid', id)
+            this.$router.push('/companion-applications-from-clients').catch(() => {})
+        },
+        openAppFromMe(id) {
+            console.log(id)
+            localStorage.setItem('orderid', id)
+            this.$router.push('/companion-applications-from-me').catch(() => {})
         }
     },
     filters: {
         moment(date) {
-            return moment(date).format('L')
+            return moment(date).format('l')
         }
     }
 }

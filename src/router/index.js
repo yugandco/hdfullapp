@@ -87,6 +87,26 @@ const routes = [
     path: '/show-companions',
     name: 'ShowCompanions',
     component: () => import('../views/ClientViews/ShowCompanions.vue')
+  },
+  {
+    path: '/companion-applications-from-me',
+    name: 'AppFromMe',
+    component: () => import('../views/CompanionViews/AppFromMe.vue')
+  },
+  {
+    path: '/companion-applications-from-clients',
+    name: 'AppFromClients',
+    component: () => import('../views/CompanionViews/AppFromClients.vue')
+  },
+  {
+    path: '/client-applications-from-me',
+    name: 'AppFromMe',
+    component: () => import('../views/ClientViews/AppFromMe.vue')
+  },
+  {
+    path: '/client-applications-from-companions',
+    name: 'AppFromCompanions',
+    component: () => import('../views/ClientViews/AppFromCompanions.vue')
   }
 ]
 
