@@ -21,7 +21,12 @@
 
 <script>
 export default {
-    name: 'Payments'
+    name: 'Payments',
+    mounted() {
+        if (this.$router.history.current.name === '/payments') {
+            document.querySelector('#bottom-nav #payments i').style.color = '#009ffa'
+        }
+    },
 }
 </script>
 

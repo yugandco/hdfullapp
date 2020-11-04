@@ -1,29 +1,41 @@
 <template>
-<div class="Registr">
-    <div class="container">
-        <div class="registrTitle">
-            <h1>Регистрация</h1>
-            <div class="divideLine"></div>
-        </div>
-        <div class="registrForm">
-            <form @submit.prevent='submitForm' id='registrForm' methods='post' action='/registr'>
-                <input type="text" class='form-control' name='firstName' placeholder="Имя" v-model='firstName'>
-                <input type="text" class='form-control' name='lastName' placeholder="Фамилия" v-model='lastName'>
-                <input @change='checkInput' id='phoneNumber' class="form-control" type="text" name="phoneNumber" placeholder="Номер телефона" v-model='phoneNumber'>
-                <input @change='checkPassword' id='password' type="text" class="form-control" name='password' placeholder="Введите пароль" v-model='password'>
-                <p class="passwordRequirment">Пароль должен состоять более 8 символов, используйте Большие буквы и цифры.</p>
-                <div class="form-check">
-                    <input @change='checkBox' class="form-check-input" type="checkbox" value="" id="terms" v-model='terms'>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Согласен с условиями использования и обработками личных данных.
-                    </label>
+<div class='registr__wrap' style='padding-top: 5%;min-height: 100vh; width: 100vw; position: abosulte; top: 0; left: 0; bottom: 0; right: 0; background-color: #009ffa; z-index: 2000;'>
+    <div class='registr'>
+        <div class="container-fluid text-white">
+            <div class='registr__pretitle h3 font-weight-bold mb-5 text-center'>Human Delivery</div>
+            <div class="registr__title h1 font-weight-normal mb-2 mt-5">Регистрация</div>
+            <div class="registr__body mt-3">
+                <div class="row">
+                    <div class="col-12">
+                        <form @submit.prevent='submitForm' action="/registr" method="post">
+                            <label for="firstName" class='form-label mb-0'>Имя</label>
+                            <input id="firstName" type="text" class='form-control mb-2' name='firstName' placeholder="Вон" v-model='firstName'>
+                            <label for="lastName" class='form-label mb-0'>Фамилия</label>
+                            <input type="text" id="lastName" class='form-control mb-2' name='lastName' placeholder="Роу" v-model='lastName'>
+                            <label for="phoneNumber" class='form-label mb-0'>Номер телефона</label>
+                            <input type="text" id='phoneNumber' class='form-control' name='phoneNumber' placeholder="87014040505" v-model='phoneNumber'>
+                            <div class='mb-2'>
+                                <small class='text-light'><span class='font-weight-bold'>Формат номер телефона:</span> 8ХХХ1112233</small>
+                            </div>
+                            <label for="password" class='form-label mb-0'>Пароль</label>
+                            <input type="password" id='password' class="form-control" name='password' placeholder="********">
+                            <small class='text-light'><span class='font-weight-bold'>Для пароля используйте:</span> не менее 8 символов, с Заглавной буквы, и цифры</small>
+                            <div class='mb-4'>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        <small>Соглашаюсь с обработкой персональных данных</small>
+                                    </label>
+                                </div>
+                                <button class='btn btn-light btn-block mt-5' style='background-color: #fd7e14; color: #fff;'>Далее</button>
+                                <div class='text-light mt-3 text-center'>или</div>
+                                <router-link to='/login' class='text-light d-flex justify-content-center'>У меня есть аккаунт</router-link>
+
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <button class="btn btn-block" type='submit'>Далее</button>
-                <div class="hasAccount">
-                    <span>У меня есть аккаунт</span>
-                    <router-link to='/login'>Войти</router-link>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -42,6 +54,12 @@ export default {
             password: '',
             terms: '',
             errors: []
+        }
+    },
+    created() {
+        if (this.$router.history.current.fullPath === '/registr') {
+            document.querySelector('#bottom-nav').style.display = 'none'
+            document.querySelector('#menu').style.display = 'none'
         }
     },
     mounted(e) {
@@ -136,89 +154,5 @@ export default {
 
 .textValidGreen {
     color: rgb(21, 226, 21) !important;
-}
-
-.Registr {
-    height: 100vh;
-    width: 100%;
-    background-color: #009FFA;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    overflow-y: scroll;
-
-    .registrTitle {
-        height: 26vh;
-        padding-top: 13vh;
-        color: #fff;
-
-        h1 {
-            font-size: 30px;
-            font-weight: 800;
-        }
-
-        .divideLine {
-            background-color: #fff;
-        }
-    }
-
-    .registrForm {
-        outline: 1px solid black;
-        height: 62vh;
-        overflow-y: scroll;
-
-        input.form-control {
-            height: 8vh;
-            margin-top: 1vh;
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .passwordRequirment {
-            font-size: 12px;
-            margin-top: 0.5vh;
-            padding: 0 1vh;
-            color: rgba(255, 255, 255, .7);
-        }
-
-        .form-check {
-            margin-top: 4vh;
-
-            label {
-                color: rgba(255, 255, 255, .7);
-            }
-        }
-
-        button {
-            height: 8vh;
-            background-color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            color: rgba(0, 0, 0, 0.67);
-            margin-top: 5vh;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .hasAccount {
-            margin-top: 5vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            span {
-                color: rgba(255, 255, 255, .7);
-            }
-
-            a {
-                margin-top: 2vh;
-                font-size: 1.2em;
-                color: rgba(255, 255, 255, .9);
-            }
-        }
-    }
 }
 </style>

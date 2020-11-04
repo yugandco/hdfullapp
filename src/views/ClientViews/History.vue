@@ -74,7 +74,11 @@ export default {
             isShowApplication: false,
         }
     },
-    mounted() {},
+    mounted() {
+        if (this.$router.history.current.fullPath === '/history') {
+            document.querySelector('#bottom-nav #history i').style.color = '#009ffa'
+        }
+    },
     methods: {
         openAppFromMe(id) {
             console.log(id)

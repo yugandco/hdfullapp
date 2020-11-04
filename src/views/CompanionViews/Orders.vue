@@ -52,11 +52,12 @@ export default {
                 })
         } else {
             const data = JSON.parse(localStorage.getItem('searchCompanion'))
-            axios.get(`api/companionHome/orders/${data.from}/${data.to}/${data.date.substr(0, 9)}/${data.typeTransport}`)
+            axios.get(`api/companionHome/orders/${data.from}/${data.to}/${data.date}/${data.typeTransport}`)
                 .then(res => {
                     if (res.status === 200) {
                         if (res.data.clients.length === 0) {
                             this.isNullOrders = 'Ваше объявление подано и заявок по вашему объявление не найдено...'
+                            localStorage.removeItem('searchCompanion')
                         } else {
                             res.datas.clients.forEach(order => {
                                 this.orders.push(order)

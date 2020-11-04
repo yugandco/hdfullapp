@@ -12,7 +12,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-2">Умбетали Ернар</h5>
+                                    <h5 class="card-title mb-2">{{ userFullName }}</h5>
                                     <p class='card-text text-warning'>
                                         <i class='material-icons'>star</i>
                                         <i class='material-icons'>star</i>
@@ -20,7 +20,7 @@
                                         <i class='material-icons'>star</i>
                                         <i class='material-icons'>star</i>
                                     </p>
-                                    <p class='card-text'>Ваш баланс: 0.00</p>
+                                    <p class='card-text'>Ваш баланс: {{ balans }}</p>
                                     <p class='card-text'><small class='text-muted'>Редактировать профиль</small></p>
                                 </div>
                             </div>
@@ -37,7 +37,8 @@
                     </div>
                 </div>
                 <div class="col-sm-12 mt-4">
-                    <button class='btn btn-block' style='background-color: #fd7e14; color: #fff; border: none; outline: none; height: 50px; font-weight: 700'>Стать попутчиком</button>
+                    <button @click='becomeCompanion' class='btn btn-block companion' style='background-color: #fd7e14; color: #fff; border: none; outline: none; height: 50px; font-weight: 700'>Стать попутчиком</button>
+                    <button @click='becomeClient' class='btn btn-block client' style='background-color: #fd7e14; color: #fff; border: none; outline: none; height: 50px; font-weight: 700'>Стать клиентом</button>
                 </div>
             </div>
         </div>
@@ -54,7 +55,9 @@ export default {
         return {
             isCompanion: '',
             isClient: '',
-            userPhoneNumber: ''
+            userPhoneNumber: '',
+            userFullName: '',
+            balans: '',
         }
     },
     mounted() {
@@ -78,7 +81,9 @@ export default {
                 .then((res) => {
                     console.log(res.data.user)
                     const user = res.data.user
+                    this.userFullName = user.firstName + ' ' + user.lastName
                     this.userPhoneNumber = user.phoneNumber
+                    this.balans = user.balans
                     if (res.data.user.isCompanion === true && res.data.user.isClient === false) {
                         document.querySelector('.companion').style.display = 'none'
                         document.querySelector('.client').style.display = 'block'

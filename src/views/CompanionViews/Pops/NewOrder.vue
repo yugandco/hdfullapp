@@ -26,7 +26,7 @@
                         <label class="input-group-text" for='date'>
                             <i class='material-icons'>today</i>
                         </label>
-                        <input id='date' type='datetime-local' class='form-control' v-model='ads.date'>
+                        <input id='date' type='date' class='form-control' v-model='ads.date'>
                     </div>
                     <select name="package" id="package" class='form-select mb-3' v-model='ads.typePackage'>
                         <option selected disabled value=''>Выбираем посылку</option>
@@ -170,13 +170,15 @@ export default {
                 price: this.ads.price,
                 date: this.ads.date,
                 typePackage: this.ads.typePackage,
-                typeTransport: this.ads.typeTransport
+                typeTransport: this.ads.typeTransport,
+                fullName: localStorage.getItem('userFullName'),
+                phoneNumber: localStorage.getItem('userPhoneNumber')
             }
             const vm = this
             axios.post('api/companion-new-order', ads, {
                     headers: {
                         token: localStorage.getItem('token'),
-                        userid: localStorage.getItem('userID')
+                        userid: localStorage.getItem('userID'),
                     }
                 })
                 .then(res => {

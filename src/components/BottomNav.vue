@@ -20,7 +20,9 @@
 <script>
 export default {
     name: 'BottomNav',
-    created() {},
+    created() {
+
+    },
     mounted() {},
     methods: {
         home() {
