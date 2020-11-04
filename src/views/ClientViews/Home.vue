@@ -201,14 +201,14 @@ export default {
                 to: this.selectedData.to,
                 packageType: this.selectedData.packageType,
                 date: this.selectedData.date,
-                price: this.selectedData.price
+                price: this.selectedData.price,
+                fullName: localStorage.getItem('userFullName'),
+                phoneNumber: localStorage.getItem('userPhoneNumber')
             }
             axios.post('api/homeSearch', homeSearchForm, {
                     headers: {
                         token: localStorage.getItem('token'),
-                        userid: localStorage.getItem('userID'),
-                        fullname: localStorage.getItem('userFullName'),
-                        phonenumber: localStorage.getItem('userPhoneNumber')
+                        userid: localStorage.getItem('userID')
                     }
                 })
                 .then((res) => {
