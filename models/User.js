@@ -104,17 +104,20 @@ let userSchema = new Schema({
     cardInfo: {
         cardNumber: {
             type: String,
+            default: '',
             required: false
         },
         cardUsername: {
             type:  String,
+            default: '',
             required: false
         },
         cardValidDate: {
             type: Date
         },
         cardCVV: {
-            type: Number
+            type: Number,
+            default: 0
         }
     },
     balans: {
