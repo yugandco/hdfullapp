@@ -127,7 +127,7 @@ export default {
             axios.post('api/registr', newUser)
                 .then(res => {
                     if (res.status === 200) {
-                        this.$router.push('login')
+                        this.$router.push('/login')
                     }
                 }, err => {
                     console.log(err.response)
