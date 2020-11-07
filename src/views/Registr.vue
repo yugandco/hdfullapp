@@ -18,11 +18,11 @@
                                 <small class='text-light'><span class='font-weight-bold'>Формат номер телефона:</span> 8ХХХ1112233</small>
                             </div>
                             <label for="password" class='form-label mb-0'>Пароль</label>
-                            <input type="password" id='password' class="form-control" name='password' placeholder="********">
+                            <input type="password" id='password' class="form-control" name='password' placeholder="********" v-model='password'>
                             <small class='text-light'><span class='font-weight-bold'>Для пароля используйте:</span> не менее 8 символов, с Заглавной буквы, и цифры</small>
                             <div class='mb-4'>
                                 <div class="form-check mt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" v-model='terms'>
                                     <label class="form-check-label" for="flexCheckDefault">
                                         <small>Соглашаюсь с обработкой персональных данных</small>
                                     </label>

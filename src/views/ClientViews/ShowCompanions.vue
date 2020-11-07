@@ -72,7 +72,7 @@ export default {
             const packageType = search.packageType
             const replacedPackageType = packageType.replace(/ /g, '-')
             console.log(replacedPackageType)
-            axios.get(`/show-companions/${search.from}/${search.to}/${search.date}/${search.price}/${replacedPackageType}/${search.transport}`)
+            axios.get(`api/show-companions/${search.from}/${search.to}/${search.date}/${search.price}/${replacedPackageType}/${search.transport}`)
                 .then(res => {
                     res.status === 200 ? console.log(res) : console.log('Error can not get companions Data')
                     const datas = res.data.companions
