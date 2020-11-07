@@ -7,7 +7,7 @@
             <div class="registr__body mt-3">
                 <div class="row">
                     <div class="col-12">
-                        <form @submit.prevent='submitForm' action="/registr" method="post">
+                        <form @submit.prevent='handleRegistrSubmit' action="/registr" method="post">
                             <label for="firstName" class='form-label mb-0'>Имя</label>
                             <input id="firstName" type="text" class='form-control mb-2' name='firstName' placeholder="Вон" v-model='firstName'>
                             <label for="lastName" class='form-label mb-0'>Фамилия</label>

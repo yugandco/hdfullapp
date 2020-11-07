@@ -56,7 +56,7 @@ const Companion = require('./models/Companion')
 // })
 
 // POST ::REGISTR
-app.post('/api/registr', (req, res) => {
+app.post('/api/registr', async (req, res) => {
     const newUser = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -64,13 +64,9 @@ app.post('/api/registr', (req, res) => {
         password: bcrypt.hashSync(req.body.password, 10),
         terms: req.body.terms
     })
-    newUser.save(err => {
-        if(err){
-            return res.status(400).json({
-                title: "User already exists :(",
-                error: 'Choose your own phone number!'
-            })
-        }
+    console.log(newUser)
+    await newUser.save((err) => {
+        if(err) return console.log(err)
         return res.status(200).json({
             title: "You're registred"
         })
