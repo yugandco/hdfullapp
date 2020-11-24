@@ -30,8 +30,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button v-if='client.companion.id === storageID' class='btn btn-success float-right'>Заявку принял</button>
-                                    <button v-else @click='acceptClientOrder(client._id)' class='btn btn-primary btn-block'>Принять заявку</button>
+                                    <p v-if='client.companion.id === storageID' class='card-text'>Вы заявку приняли, свяжитесь с клиентом <a :href='"tel:" + client.phoneNumber'>{{client.phoneNumber}}</a></p>
+                                    <button v-else @click='acceptClientOrder(client._id)' class='btn btn-primary float-right'>Принять заявку</button>
                                 </div>
                             </div>
                         </div>

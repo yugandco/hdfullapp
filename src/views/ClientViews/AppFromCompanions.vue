@@ -30,13 +30,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div v-if='companion.client !== []' class="card-footer">
                                     <div v-for='(cl, ind) in companion.client' :key='ind'>
-                                        <p v-if='cl.id === userid' class='card-text'>Заявка уже принята</p>
+                                        <p v-if='cl.id === userid' class='card-text'>Вы заявку приняли, свяжитесь с попутчиком <a :href='"tel:" + companion.phoneNumber'>{{companion.phoneNumber}}</a></p>
                                         <div v-else>
                                             <button @click='acceptCompanionOrder(companion._id)' class='btn btn-primary'>Принять заказ</button>
                                         </div>
                                     </div>
+                                </div>
+                                <div v-else class="card-footer">
+                                    <button @click='acceptCompanionOrder(companion._id)' class='btn btn-primary float-right'>Принять заказ</button>
                                 </div>
                             </div>
                         </div>

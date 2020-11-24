@@ -100,71 +100,71 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Login {
-    height: 775px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-    background-color: #009FFA;
+// .Login {
+//     height: 775px;
+//     width: 100%;
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     z-index: 1;
+//     background-color: #009FFA;
 
-    .loginTitle {
-        height: 196px;
-        padding-top: 98px;
+//     .loginTitle {
+//         height: 196px;
+//         padding-top: 98px;
 
-        h1 {
-            font-size: 30px;
-            color: #fff;
-        }
+//         h1 {
+//             font-size: 30px;
+//             color: #fff;
+//         }
 
-        .divideLine {
-            background-color: #fff;
-        }
-    }
+//         .divideLine {
+//             background-color: #fff;
+//         }
+//     }
 
-    .loginContent {
-        overflow-y: scroll;
+//     .loginContent {
+//         overflow-y: scroll;
 
-        input.form-control {
-            height: 60px;
-            margin-top: 1vh;
-            font-size: 18px;
-            font-weight: 500;
-        }
+//         input.form-control {
+//             height: 60px;
+//             margin-top: 1vh;
+//             font-size: 18px;
+//             font-weight: 500;
+//         }
 
-        .forgotPassword {
-            margin-top: 15px;
-            padding: 0 11.3px;
-            color: rgba(255, 255, 255, .7);
-        }
+//         .forgotPassword {
+//             margin-top: 15px;
+//             padding: 0 11.3px;
+//             color: rgba(255, 255, 255, .7);
+//         }
 
-        #submitBtn {
-            height: 50px;
-            background-color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 37.7px;
-            color: rgba(0, 0, 0, 0.67);
-        }
+//         #submitBtn {
+//             height: 50px;
+//             background-color: #fff;
+//             font-size: 18px;
+//             font-weight: 700;
+//             margin-top: 37.7px;
+//             color: rgba(0, 0, 0, 0.67);
+//         }
 
-        .hasAccount {
-            margin-top: 37.7px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+//         .hasAccount {
+//             margin-top: 37.7px;
+//             display: flex;
+//             flex-direction: column;
+//             align-items: center;
 
-            span {
-                font-size: 16px;
-                color: rgba(255, 255, 255, .7);
-            }
+//             span {
+//                 font-size: 16px;
+//                 color: rgba(255, 255, 255, .7);
+//             }
 
-            a {
-                color: rgba(255, 255, 255, .9);
-                margin-top: 15px;
-                font-size: 1.2em;
-            }
-        }
-    }
-}
+//             a {
+//                 color: rgba(255, 255, 255, .9);
+//                 margin-top: 15px;
+//                 font-size: 1.2em;
+//             }
+//         }
+//     }
+// }
 </style>

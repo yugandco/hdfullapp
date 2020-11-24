@@ -30,11 +30,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div v-if='companion.client !== []' class="card-footer">
                                     <div v-for='(cl, ind) in companion.client' :key='ind'>
-                                        <button v-if='cl.id === storageID' class='btn btn-success'>Заявка принята</button>
-                                        <p v-if='!cl.id' class='card-text'>Заявка еще не принята</p>
+                                        <p v-if='cl.id === storageID' class='card-text'>Вашу заявку приняли, свяжитесь с попутчиком <a :href='"tel:" + companion.phoneNumber'>{{companion.phoneNumber}}</a></p>
                                     </div>
+                                </div>
+                                <div v-else class="card-footer">
+                                    <p class='card-text'>Ваша заявка еще не принята</p>
                                 </div>
                             </div>
                         </div>

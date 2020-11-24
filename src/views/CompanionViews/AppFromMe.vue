@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="col-9">
                                         <div class="card-body">
-                                            <h5 class='card-title mb-2'>{{client._id}}</h5>
+                                            <h5 class='card-title mb-2'>{{client.fullName}}</h5>
                                             <p class='card-text mb-0'>
                                                 <small class='text-muted'>
                                                     <i class='material-icons' style='color: #fd7e14'>{{ client.typeTransport }}</i> <span class='font-weight-bold'>{{ client.from + ' - ' + client.to }}</span>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <button v-if='client.companion.id !== userid' class='btn btn-light float-right'>Клиент заявку еще не принял</button>
-                                    <button v-else class='btn btn-success float-right'>Заявка принята</button>
+                                    <p v-else class='card-text'>Заявка принята, свяжитесь с клиентом <a :href='"tel:" + client.phoneNumber'>{{client.phoneNumber}}</a></p>
                                 </div>
                             </div>
                         </div>

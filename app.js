@@ -45,6 +45,7 @@ app.use((req, res, next) => {
 const User = require('./models/User')
 const Client = require('./models/Client')
 const Companion = require('./models/Companion')
+const e = require('express')
 
 
 
@@ -249,16 +250,23 @@ app.get('/api/companionHome/orders/:from/:to/:date/:typeTransport', async (req, 
 
 app.post('/api/companion-home/orders/:id', async (req, res) => {
     let orderID = {_id: req.params.id}
-
-    Client.findByIdAndUpdate(orderID, {$push: {"counterOfApplicationsFromCompanions": {companionid: req.headers.userid, orderid: req.params.id, text: 'Заявка подана'}}}, (err, client) => {
-        if(err) return console.log(err);
-        Companion.findOneAndUpdate({companionID: req.headers.userid}, {$push: {"counterOfApplicationsFromCompanions" : {clientid: client.clientID, orderid: req.params.id, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
-            if(err) return console.log('Заявка не подана')
-            return res.status(200).json({
-                title: 'Заявка подана',
-                id: client._id
+    Companion.findOne({companionID: req.headers.userid}, (err, companion) => {
+        if(!companion) {
+            return res.json({
+                title: "Чтобы подать заявку, нужно создать новое объявление!"
             })
-        })
+        } else {
+            Client.findByIdAndUpdate(orderID, {$push: {"counterOfApplicationsFromCompanions": {companionid: req.headers.userid, orderid: req.params.id, text: 'Заявка подана'}}}, (err, client) => {
+                if(err) return console.log(err);
+                Companion.findOneAndUpdate({companionID: req.headers.userid}, {$push: {"counterOfApplicationsFromCompanions" : {clientid: client.clientID, orderid: req.params.id, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
+                    if(err) return console.log('Заявка не подана')
+                    return res.status(200).json({
+                        title: 'Заявка подана',
+                        id: client._id
+                    })
+                })
+            })
+        }
     })
 })
 
@@ -533,6 +541,79 @@ app.get('/api/history/:userid', async (req, res) => {
         })
     })
 })
+
+// LIST ALL COMPANIONS CHOSE BY CLIENTS
+app.get('/api/client-orders/:from/:to', async(req, res) => {
+    await Companion.find({from: req.params.from, to: req.params.to}, (err, companions) => {
+        if(err) return console.log(err)
+
+        return res.status(200).json({
+            title: "All Companions is here",
+            companions
+        })
+    })
+})
+
+app.get('/api/companion-orders/:from/:to', async (req, res) => {
+    await Client.find({from: req.params.from, to: req.params.to}, (err, clients) => {
+        if(err) return console.log(err)
+
+        return res.status(200).json({
+            title: 'All Clients is here',
+            clients
+        })
+    })
+})
+
+
+// app.post('/api/submit-client-orders/:userid/:itemid/:from/:to', async (req, res) => {
+//     Companion.findOne({_id: req.params.itemid}, (err, companion) => {
+//         Client.findOne({clientID: req.params.userid}, (err, client) => {
+//             if(client.from !== companion.from && client.to !== companion.to){
+//                 return res.json({
+//                     title: "Для того, чтобы подать заявку нужно создать свое объявление"
+//                 })
+//             } else {
+//                 Client.findOneAndUpdate({from: companion.from, to: companion.to}, {
+//                     $push: {
+//                         "counterOfApplicationsFromClients": {
+//                             companionid: companion.companionID,
+//                             orderid: req.params.itemid,
+//                             text: 'Заявка подана'
+//                         }
+//                     }   
+//                 },
+//                 {
+//                     safe: true,
+//                     upsert: true,
+//                     new: true
+//                 }, (err) => {
+//                     if(err) return console.log(err)
+
+//                     Companion.findOneAndUpdate({_id: req.params.itemid}, {
+//                         $push: {
+//                             "counterOfApplicationsFromClients": {
+//                                 clientid: req.params.userid,
+//                                 orderid: req.params.itemid,
+//                                 text: 'Заявка подана'
+//                             }
+//                         }
+//                     }, {
+//                         safe: true,
+//                         upsert: true,
+//                         new: true
+//                     }, (err) => {
+//                         if(err) return console.log(err)
+//                     })
+//                 })
+
+//                 return res.status(200).json({
+//                     title: 'Вы успешно подали заявку'
+//                 })
+//             }
+//         })
+//     })
+// })
 
 if(process.env.NODE_ENV === 'production'){
     app.use('/', serveStatic(path.join(__dirname, '/dist')))

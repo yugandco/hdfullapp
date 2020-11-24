@@ -107,6 +107,21 @@ const routes = [
     path: '/client-applications-from-companions',
     name: 'AppFromCompanions',
     component: () => import('../views/ClientViews/AppFromCompanions.vue')
+  },
+  {
+    path: '/welcome',
+    name: 'Welcome',
+    component: () => import('../views/Welcome.vue')
+  },
+  {
+    path: '/client-orders',
+    name: 'AllOrders',
+    component: () => import('../views/ClientViews/AllOrders.vue')
+  },
+  {
+    path: '/companion-orders',
+    name: 'AllCompanionOrder',
+    component: () => import('../views/CompanionViews/AllOrders.vue')
   }
 ]
 

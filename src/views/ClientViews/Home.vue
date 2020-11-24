@@ -184,7 +184,7 @@ export default {
     },
     created() {
         if (!localStorage.getItem('token')) {
-            this.$router.push('/login')
+            this.$router.push('/welcome')
         }
     },
     mounted() {

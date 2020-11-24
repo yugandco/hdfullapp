@@ -3,6 +3,9 @@
     <accepted-modal v-if='isAcceptedModalOpen' @closeAcceptedModal='closeAcceptedModal' />
     <div class="container-fluid">
         <div class="row gy-2">
+            <div v-if='errors'>{{errors}}
+                <router-link to='/companion-new-order'>Создать</router-link>
+            </div>
             <div v-if='hideWhenClicked' class='hide'>
                 <div>{{isNullOrders}}</div>
                 <div class='mt-3'><button @click='allOrders' class='btn btn-primary'>Все заказы</button></div>
@@ -36,20 +39,21 @@ export default {
             orders: [],
             singleClient: false,
             isAcceptedModalOpen: false,
-            hideWhenClicked: true
+            hideWhenClicked: true,
+            errors: ''
         }
     },
     created() {
         if (!localStorage.getItem('searchCompanion')) {
             this.hideWhenClicked = false
-            axios.get('api/companionHome/orders')
-                .then((res) => {
-                    console.log(res.data.clients)
-                    const datas = res.data.clients
-                    datas.forEach(data => {
-                        this.orders.push(data)
-                    })
-                })
+            // axios.get('api/companionHome/orders')
+            //     .then((res) => {
+            //         console.log(res.data.clients)
+            //         const datas = res.data.clients
+            //         datas.forEach(data => {
+            //             this.orders.push(data)
+            //         })
+            //     })
         } else {
             const data = JSON.parse(localStorage.getItem('searchCompanion'))
             axios.get(`api/companionHome/orders/${data.from}/${data.to}/${data.date}/${data.typeTransport}`)
@@ -70,22 +74,22 @@ export default {
     },
     mounted() {},
     methods: {
-        allOrders() {
-            localStorage.removeItem('searchCompanion')
-            axios.get('api/companionHome/orders')
-                .then((res) => {
-                    if (res.status === 200) {
-                        this.hideWhenClicked = false
-                        console.log(res.data.clients)
-                        const datas = res.data.clients
-                        this.orders = []
+        // allOrders() {
+        //     localStorage.removeItem('searchCompanion')
+        //     axios.get('api/companionHome/orders')
+        //         .then((res) => {
+        //             if (res.status === 200) {
+        //                 this.hideWhenClicked = false
+        //                 console.log(res.data.clients)
+        //                 const datas = res.data.clients
+        //                 this.orders = []
 
-                        datas.forEach(data => {
-                            this.orders.push(data)
-                        })
-                    }
-                })
-        },
+        //                 datas.forEach(data => {
+        //                     this.orders.push(data)
+        //                 })
+        //             }
+        //         })
+        // },
         openAcceptedModal(id) {
             axios.post(`api/companion-home/orders/${id}`, null, {
                     headers: {
@@ -95,7 +99,12 @@ export default {
                 .then(res => {
                     if (res.status === 200) {
                         console.log(res)
-                        this.isAcceptedModalOpen = true
+                        if (res.data.title) {
+                            this.isAcceptedModalOpen = false
+                            this.errors = res.data.title
+                        } else {
+                            this.isAcceptedModalOpen = true
+                        }
 
                     } else {
                         console.log('Error')

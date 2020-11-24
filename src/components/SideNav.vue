@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-sm-12 mt-4">
                     <div class="list-group">
-                        <div class="list-group-item list-group-item-action">Мои платежные карты</div>
+                        <div @click='goPayments' class="list-group-item list-group-item-action">Платежи</div>
                         <div class="list-group-item list-group-item-action">Конфигурация сайта</div>
                         <div class="list-group-item list-group-item-action">Тех. поддержка</div>
                         <div class="list-group-item list-group-item-action">Конфидециальность данных</div>
@@ -68,6 +68,9 @@ export default {
         }
     },
     methods: {
+        goPayments() {
+            this.$router.push('/payments').catch(() => {})
+        },
         logout() {
             localStorage.clear()
             this.$router.push('/login')

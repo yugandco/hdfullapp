@@ -2,13 +2,13 @@
 <div id='bottom-nav'>
     <nav class="nav nav-pills nav-fill fixed-bottom bg-light align-items-center" style='height: 70px;'>
         <div @click='home' id='home' class="nav-link">
-            <i class='material-icons'>home</i>
+            <i class='material-icons'>search</i>
+        </div>
+        <div @click='orders' id='orders' class="nav-link">
+            <i class='material-icons'>list_alt</i>
         </div>
         <div @click='history' id='history' class="nav-link">
             <i class='material-icons'>history</i>
-        </div>
-        <div @click='payments' id='payments' class="nav-link">
-            <i class='material-icons'>payments</i>
         </div>
         <div @click='sidenav' id='sidenav' class="nav-link">
             <i class='material-icons'>face</i>
@@ -34,7 +34,7 @@ export default {
                 }).catch(() => {})
             }
             document.querySelector('#home i').style.color = '#009ffa'
-            document.querySelector('#payments i').style.color = 'rgba(0,0,0, .4)'
+            document.querySelector('#orders i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#history i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#sidenav i').style.color = 'rgba(0,0,0, .4)'
         },
@@ -46,22 +46,26 @@ export default {
             }
             document.querySelector('#home i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#history i').style.color = '#009ffa'
-            document.querySelector('#payments i').style.color = 'rgba(0,0,0, .4)'
+            document.querySelector('#orders i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#sidenav i').style.color = 'rgba(0,0,0, .4)'
 
         },
-        payments() {
-            this.$router.push('/payments').catch(() => {})
+        orders() {
+            if (localStorage.getItem('isCompanion') === 'true' && localStorage.getItem('isClient') === 'false') {
+                this.$router.push('/companion-orders').catch(() => {})
+            } else {
+                this.$router.push('/client-orders').catch(() => {})
+            }
             document.querySelector('#home i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#history i').style.color = 'rgba(0,0,0, .4'
-            document.querySelector('#payments i').style.color = '#009ffa'
+            document.querySelector('#orders i').style.color = '#009ffa'
             document.querySelector('#sidenav i').style.color = 'rgba(0,0,0, .4)'
         },
         sidenav() {
             this.$router.push('/sidenav').catch(() => {})
             document.querySelector('#home i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#history i').style.color = 'rgba(0,0,0, .4'
-            document.querySelector('#payments i').style.color = 'rgba(0,0,0, .4)'
+            document.querySelector('#orders i').style.color = 'rgba(0,0,0, .4)'
             document.querySelector('#sidenav i').style.color = '#009ffa'
         }
     }
