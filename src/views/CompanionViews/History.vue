@@ -1,10 +1,10 @@
 <template>
 <div class='history mt-5 pt-4' id='CompanionHistory'>
     <div class="container-fluid">
-        <div class='history__title h1 mb-0 border-bottom pb-3'>Мои посылки</div>
+        <div class='history__title h1 font-weight-bold mb-0 border-bottom pb-2'>Мои заказы</div>
         <div class="history__body" style='overflow-y: scroll; overflow-x: hidden; height: 78vh;'>
             <div class="row gy-2">
-                <div class="col-sm-12 mt-3" v-for='(order, index) in orders' :key='index'>
+                <div class="col-sm-12 mt-3" v-for='(order, index) in companions' :key='index'>
                     <div class="card">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <div class="float-left">
@@ -31,9 +31,16 @@
                                 <p>Ваша посылка: <span class="font-weight-bold">{{ order.typePackage }}</span></p>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <p v-if='order.companion.deliveryStatus.isDelivered.text === "Посылка доставлена"' class='card-text'>Посылка доставлена</p>
-                            <button v-else @click='successDelivered(order._id)' class='btn btn-success'>Посылку доставил</button>
+                        <div class="card-footer text-center">
+                            <div class='border-bottom mt-2 pb-3 font-weight-bold'>Заявки от:</div>
+                            <div class="row mt-3 pb-2">
+                                <div class="col">
+                                    <button @click='openAppFromMe(order._id)' class='btn btn-outline-secondary btn-block'>Меня <span class='badge bg-danger' style=''></span></button>
+                                </div>
+                                <div class="col">
+                                    <button @click='openAppFromClients(order._id)' class='btn btn-dark btn-block'>Клиентов <span class='badge bg-danger' style=''></span></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,34 +58,42 @@ export default {
     name: 'CompanionHistory',
     data() {
         return {
-            orders: []
+            companions: []
         }
     },
+    created() {
+        this.getAllOrders()
+    },
     mounted() {
-        this.getAllMyOrders()
+
     },
     methods: {
-        successDelivered(id) {
-            const clientOrderID = id
-            const companionUserID = localStorage.getItem('userID')
-            console.log(clientOrderID, ' ', companionUserID)
-            axios.post(`api/companion-history/${clientOrderID}/${companionUserID}`)
-                .then(res => {
-                    console.log(res)
-                })
-        },
-        getAllMyOrders() {
-            const companionUserID = localStorage.getItem('userID')
-            axios.get(`api/companion-history/${companionUserID}`)
-                .then(res => {
-                    console.log(res)
-                    const datas = res.data.clients
-                    datas.forEach(data => {
-                        this.orders.push(data)
-                    })
+        getAllOrders() {
+            const userid = localStorage.getItem('userID')
 
+            axios.get(`api/companion-history/${userid}`)
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log(res)
+                        const datas = res.data.companions
+
+                        datas.forEach(data => {
+                            this.companions.push(data)
+                        })
+                    }
                 })
         },
+
+        openAppFromMe(id) {
+            localStorage.setItem('companionItemID', id)
+            this.$router.push('/companion-applications-from-me').catch(() => {})
+        },
+
+        openAppFromClients(id) {
+            localStorage.setItem('companionItemID', id)
+            this.$router.push('/companion-applications-from-clients').catch(() => {})
+        },
+
         moment(date) {
             return moment(date)
         }

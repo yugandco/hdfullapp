@@ -30,13 +30,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if='companion.client !== []' class="card-footer">
-                                    <div v-for='(cl, ind) in companion.client' :key='ind'>
-                                        <p v-if='cl.id === storageID' class='card-text'>Вашу заявку приняли, свяжитесь с попутчиком <a :href='"tel:" + companion.phoneNumber'>{{companion.phoneNumber}}</a></p>
-                                    </div>
-                                </div>
-                                <div v-else class="card-footer">
-                                    <p class='card-text'>Ваша заявка еще не принята</p>
+                                <div class="card-footer">
+                                    <p v-if='isAccepted'>Вашу заявку приняли, свяжитесь с попутчиком <a :href='"tel:" + companion.phoneNumber'>{{companion.phoneNumber}}</a></p>
+                                    <p v-else class='card-text'>Ваша заявка еще не принята</p>
                                 </div>
                             </div>
                         </div>
@@ -52,14 +48,15 @@
 import axios from 'axios'
 
 export default {
-    name: 'AppFromMe',
+    name: 'AppFromClientMe',
     data() {
         return {
             companions: [],
             text: 'Вы еще не подавали заявки',
             isRespond: false,
             storageID: localStorage.getItem('userID'),
-            isShow: false
+            isShow: false,
+            isAccepted: ''
         }
     },
     created() {},
@@ -69,9 +66,9 @@ export default {
     },
     methods: {
         getAppsFromMe() {
-            const clientUserID = localStorage.getItem('userID')
-
-            axios.get(`api/client-applications-from-me/${clientUserID}`)
+            const userid = localStorage.getItem('userID')
+            const orderid = localStorage.getItem('clientOrderID')
+            axios.get(`api/client-applications-from-me/${userid}/${orderid}`)
                 .then(res => {
                     console.log(res)
                     if (res.status === 200) {
@@ -79,8 +76,14 @@ export default {
                         datas.forEach(data => {
                             this.companions.push(data)
                         })
-                    } else {
-                        console.log(err)
+                        this.companions.forEach(data => {
+                            data.client.find(d => {
+                                if(d.id === userid && d.deliveryStatus.isAdopted.status === true){
+                                    this.isAccepted = d.id
+                                }
+                                return this.isAccepted
+                            })
+                        })
                     }
                 })
         },

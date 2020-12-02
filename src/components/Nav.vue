@@ -4,7 +4,7 @@
         <div class="container">
             <router-link to='/' class='navbar-brand'>HumanDelivery</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span>ЕУ</span>
+                <span>{{user}}</span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
@@ -25,7 +25,7 @@ export default {
     name: 'Nav',
     data() {
         return {
-            userPhoneNumber: '',
+            user: '',
         }
     },
     mounted() {
@@ -44,7 +44,7 @@ export default {
                 .then((res) => {
                     console.log(res.data.user.phoneNumber)
                     const user = res.data.user
-                    this.userPhoneNumber = user.phoneNumber.charAt(0)
+                    this.user = user.firstName.charAt(0) + user.lastName.charAt(0)
                 })
         },
         logout() {

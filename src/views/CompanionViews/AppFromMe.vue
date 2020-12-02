@@ -48,7 +48,7 @@
 import axios from 'axios'
 
 export default {
-    name: 'AppFromMe',
+    name: 'AppFromCompanionMe',
     data() {
         return {
             clients: [],
@@ -78,7 +78,7 @@ export default {
                 })
         },
         backToSearch() {
-            this.$router.push('/companionHome/myads').catch(() => {})
+            this.$router.push('/companion-history').catch(() => {})
         }
     },
 }

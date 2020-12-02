@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/ClientViews/Home.vue'
-// Components for Companions
-import Orders from '../views/CompanionViews/Orders.vue'
-import MyAds from '../views/CompanionViews/MyAds.vue'
+
 
 Vue.use(VueRouter)
 
@@ -13,14 +11,6 @@ const routes = [
     name: 'Home',
     component: Home
   },
-  // {
-  //   path: '/search',
-  //   name: 'Search',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue')
-  // },
   {
     path: '/history',
     name: 'History',
@@ -57,26 +47,14 @@ const routes = [
     component: () => import('../views/ConfigAccount.vue')
   },
   {
-    path: '/companionHome',
+    path: '/companion-home',
     name: 'CompanionHome',
     component: () => import('../views/CompanionViews/Home.vue'),
-    children: [
-      {
-        path: 'orders',
-        name: 'Orders',
-        component: Orders
-      },
-      {
-        path: 'myads',
-        name: 'MyAds',
-        component: MyAds
-      }
-    ]
   },
   {
-    path: '/companion-new-order',
-    name: 'NewOrder',
-    component: () => import('../views/CompanionViews/Pops/NewOrder.vue')
+    path: '/companion-home-search-result',
+    name: 'ShowClients',
+    component: () => import('../views/CompanionViews/Pops/ShowClients.vue')
   },
   {
     path: '/companion-history',
@@ -90,7 +68,7 @@ const routes = [
   },
   {
     path: '/companion-applications-from-me',
-    name: 'AppFromMe',
+    name: 'AppFromCompanionMe',
     component: () => import('../views/CompanionViews/AppFromMe.vue')
   },
   {
@@ -100,7 +78,7 @@ const routes = [
   },
   {
     path: '/client-applications-from-me',
-    name: 'AppFromMe',
+    name: 'AppFromClientMe',
     component: () => import('../views/ClientViews/AppFromMe.vue')
   },
   {

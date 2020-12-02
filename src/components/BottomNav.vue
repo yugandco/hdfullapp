@@ -27,7 +27,7 @@ export default {
     methods: {
         home() {
             if (localStorage.getItem('isCompanion') === 'true' && localStorage.getItem('isClient') === 'false') {
-                this.$router.push('/companionHome/orders').catch(() => {})
+                this.$router.push('/companion-home').catch(() => {})
             } else {
                 this.$router.push({
                     name: 'Home'

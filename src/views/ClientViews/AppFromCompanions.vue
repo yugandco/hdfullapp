@@ -30,15 +30,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if='companion.client !== []' class="card-footer">
-                                    <div v-for='(cl, ind) in companion.client' :key='ind'>
-                                        <p v-if='cl.id === userid' class='card-text'>Вы заявку приняли, свяжитесь с попутчиком <a :href='"tel:" + companion.phoneNumber'>{{companion.phoneNumber}}</a></p>
-                                        <div v-else>
-                                            <button @click='acceptCompanionOrder(companion._id)' class='btn btn-primary'>Принять заказ</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div v-else class="card-footer">
+                                <div class="card-footer">
                                     <button @click='acceptCompanionOrder(companion._id)' class='btn btn-primary float-right'>Принять заказ</button>
                                 </div>
                             </div>
@@ -82,7 +74,8 @@ export default {
         },
         getAppsFromCompanions() {
             const clientUserID = localStorage.getItem('userID')
-            axios.get(`api/client-applications-from-companions/${clientUserID}`)
+            const orderid = localStorage.getItem('clientOrderID')
+            axios.get(`api/client-applications-from-companions/${clientUserID}/${orderid}`)
                 .then(res => {
                     if (res.status === 200) {
                         console.log(res)

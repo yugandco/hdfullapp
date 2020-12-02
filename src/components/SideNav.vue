@@ -114,7 +114,7 @@ export default {
                         console.log('You become a companion')
                         localStorage.setItem('isCompanion', cc.isCompanion)
                         localStorage.setItem('isClient', cc.isClient)
-                        this.$router.push('/companionHome/orders')
+                        this.$router.push('/companion-home')
                     } else {
                         console.log('You dont able to a companion')
                     }

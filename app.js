@@ -49,13 +49,6 @@ const e = require('express')
 
 
 
-// @route home
-// app.get('/', (req, res) => {
-//     res.json({
-//         msg: "Hello World"
-//     })
-// })
-
 // POST ::REGISTR
 app.post('/api/registr', async (req, res) => {
     const newUser = new User({
@@ -159,30 +152,35 @@ app.post('/api/homeSearch', async (req, res) => {
 
 app.get('/api/show-companions/:from/:to/:date/:price/:replacedPackageType/:transport', urlencoded, async (req, res) => {
     const replacedPackageType = req.params.replacedPackageType.replace(/-/g, ' ')
-    await Companion.find({from: req.params.from, to: req.params.to}, (err, companions) => {
+    await Companion.find({from: req.params.from, to: req.params.to, price: req.params.price, date: req.params.date, typeTransport: req.params.transport}, (err, companions) => {
         if(err){
             return res.status(404).json({
                 title: 'Попутчик не найден!'
             })
         }
 
-        return res.status(200).json({
-            title: 'Все что нашел!',
-            companions
+        Client.findOne({from: req.params.from, to: req.params.to, price: req.params.price, typePackage: replacedPackageType, date: req.params.date, typeTransport: req.params.transport}, (err, client) => {
+            if(err) return console.log(err)
+
+            return res.status(200).json({
+                title: 'Все что нашел!',
+                companions,
+                client
+            })
         })
     })
 })
 
 // @GET,@POST FROM CLIENT
-app.post('/api/show-companions/:id/:userid', async (req, res) => {
-    let orderID = {_id: req.params.id}
-
-    Companion.findByIdAndUpdate(orderID, {$push: {"counterOfApplicationsFromClients": {clientid: req.params.userid, orderid: req.params.id, text: 'Заявка подана'}}}, (err, companion) => {
-        if(err) return console.log('Not found', err);
-        Client.findOneAndUpdate({clientID: req.params.userid}, {$push: {"counterOfApplicationsFromClients" : {companionid: companion.companionID, orderid: req.params.id, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
-            if(err) return console.log('Заявка не подана')
-            return res.status(200).json({
-                title: 'Заявка подана'
+app.post('/api/show-companions/:clientorderid/:userid/:companionitemid', async (req, res) => {
+    Companion.findOne({_id: req.params.companionitemid}, (err, companion) => {
+        Companion.findByIdAndUpdate({_id: req.params.companionitemid}, {$push: {"counterOfApplicationsFromClients": {clientid: req.params.userid, orderid: req.params.clientorderid, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
+            if(err) return console.log(err);
+            Client.findOneAndUpdate({_id: req.params.clientorderid}, {$push: {"counterOfApplicationsFromClients" : {companionid: companion.companionID, orderid: req.params.companionitemid, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
+                if(err) return console.log(err)
+                return res.status(200).json({
+                    title: 'Заявка подана'
+                })
             })
         })
     })
@@ -224,64 +222,69 @@ app.post('/api/becomeClient', async (req, res) => {
 
 
 // @GET FROM COMPANION
-app.get('/api/companionHome/orders', async (req, res) => {
-    Client.find({}, (err, clients) => {
-        if(err){
-            return res.status(500).json({
-                msg: "Server error"
-            })
-        } 
-        return res.status(200).json({
-            msg: "Orders is here",
-            clients
-        })
+app.post('/api/companion-home', async (req, res) => {
+    let companion = new Companion({
+        companionID: req.headers.userid,
+        phoneNumber: req.body.phoneNumber,
+        fullName: req.body.fullName,
+        from: req.body.from,
+        to: req.body.to,
+        date: req.body.date,
+        typePackage: req.body.typePackage,
+        price: req.body.price,
+        typeTransport: req.body.typeTransport
     })
-})
 
-app.get('/api/companionHome/orders/:from/:to/:date/:typeTransport', async (req, res) => {
-    Client.find({from: req.params.from, to: req.params.to, date: req.params.date, typeTransport: req.params.typeTransport}, (err, clients) => {
+    companion.save(err => {
         if(err) return console.log(err)
+
         return res.status(200).json({
-            title: "All requests",
-            clients
+            title: "Вы успешно создали объявление!"
         })
     })
 })
 
-app.post('/api/companion-home/orders/:id', async (req, res) => {
-    let orderID = {_id: req.params.id}
-    Companion.findOne({companionID: req.headers.userid}, (err, companion) => {
-        if(!companion) {
-            return res.json({
-                title: "Чтобы подать заявку, нужно создать новое объявление!"
+
+app.get('/api/companion-home-search-result/:typeTransport/:from/:to/:price/:replacedPackageType/:date', async (req, res) => {
+    const replacedPackageType = req.params.replacedPackageType.replace(/-/g, ' ')
+    Client.find({from: req.params.from, to: req.params.to, price: req.params.price, typeTransport: req.params.typeTransport, typePackage: replacedPackageType, date: req.params.date}, (err, clients) => {
+        if(err) return console.log(err)
+        Companion.findOne({from: req.params.from, to: req.params.to, price: req.params.price, typeTransport: req.params.typeTransport, typePackage: replacedPackageType, date: req.params.date}, (err, companion) => {
+            if(err) return console.log(err)
+
+            return res.status(200).json({
+                title: 'Все попутчики тут',
+                clients,
+                companion
             })
-        } else {
-            Client.findByIdAndUpdate(orderID, {$push: {"counterOfApplicationsFromCompanions": {companionid: req.headers.userid, orderid: req.params.id, text: 'Заявка подана'}}}, (err, client) => {
-                if(err) return console.log(err);
-                Companion.findOneAndUpdate({companionID: req.headers.userid}, {$push: {"counterOfApplicationsFromCompanions" : {clientid: client.clientID, orderid: req.params.id, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
-                    if(err) return console.log('Заявка не подана')
-                    return res.status(200).json({
-                        title: 'Заявка подана',
-                        id: client._id
-                    })
+        })
+    })
+})
+
+app.post('/api/companion-home-search-result/:companionitemid/:userid/:clientorderid', async (req, res) => {
+    Client.findOne({_id: req.params.clientorderid}, (err, client) => {
+        Client.findByIdAndUpdate({_id: req.params.clientorderid}, {$push: {"counterOfApplicationsFromCompanions": {companionid: req.params.userid, orderid: req.params.companionitemid, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
+            if(err) return console.log(err);
+            Companion.findOneAndUpdate({_id: req.params.companionitemid}, {$push: {"counterOfApplicationsFromCompanions" : {clientid: client.clientID, orderid: req.params.clientorderid, text: 'Заявка подана'}}}, {safe: true, upsert: true, new: true}, (err) => {
+                if(err) return console.log(err)
+                return res.status(200).json({
+                    title: 'Заявка подана'
                 })
             })
-        }
+        })
     })
 })
 
 
 // @GET FROM COMPANION ADS
-app.get('/api/companionHome/myads', async (req, res) => {
-    await Companion.find({companionID: req.headers.userid}, (err, companions) => {
-        if(err){
-            return console.log(err)
-        } else {
-            return res.status(200).json({
-                msg: 'Your ads is here',
-                companions
-            })
-        }
+app.get('/api/companion-history/:userid', async (req, res) => {
+    await Companion.find({companionID: req.params.userid}, (err, companions) => {
+        if(err) return console.log(err)
+
+        return res.status(200).json({
+            title: 'Все ваши объявлении',
+            companions
+        })
     })
 })
 
@@ -373,8 +376,8 @@ app.get('/api/companion-applications-from-me/:companionUserID', async (req, res)
 
 
 // Get All Applications submitted by Companion, show in client
-app.get('/api/client-applications-from-companions/:clientUserID', async (req, res) => {
-    Companion.find({"counterOfApplicationsFromCompanions.clientid": req.params.clientUserID}, (err, companions) => {
+app.get('/api/client-applications-from-companions/:clientUserID/:orderid', async (req, res) => {
+    Companion.find({"counterOfApplicationsFromCompanions.clientid": req.params.clientUserID, "counterOfApplicationsFromCompanions.orderid": req.params.orderid}, (err, companions) => {
         if(err) return console.log(err)
 
         return res.status(200).json({
@@ -445,8 +448,8 @@ app.post('/api/client-applications-from-companions/:clientUserID/:companionOrder
 })
 
 
-app.get('/api/client-applications-from-me/:clientUserID', async (req, res) => {
-    await Companion.find({"counterOfApplicationsFromClients.clientid": req.params.clientUserID}, (err, companions) => {
+app.get('/api/client-applications-from-me/:userid/:orderid', async (req, res) => {
+    await Companion.find({"counterOfApplicationsFromClients.clientid": req.params.userid, "counterOfApplicationsFromClients.orderid": req.params.orderid}, (err, companions) => {
         if(err) return console.log(err)
 
         return res.status(200).json({
@@ -481,52 +484,52 @@ app.post('/api/companion-new-order', async (req, res) => {
 })
 
 // ROUTES FOR COMPANION /COMPANION-HISTORY
-app.get('/api/companion-history/:companionUserID', async (req, res) => {
-    await Companion.findOne({companionID: req.params.companionUserID}, (err, companion) => {
-        if(err) return console.log(err)
+// app.get('/api/companion-history/:companionUserID', async (req, res) => {
+//     await Companion.findOne({companionID: req.params.companionUserID}, (err, companion) => {
+//         if(err) return console.log(err)
 
-        if(!companion){
-            return res.json({
-                title: 'У вас нет посылок, для начала подайте объялвение!'
-            })
-        } else {
-            let id = []
-            companion.client.forEach(cl => {
-                id.push(cl.id)
-            })
+//         if(!companion){
+//             return res.json({
+//                 title: 'У вас нет посылок, для начала подайте объялвение!'
+//             })
+//         } else {
+//             let id = []
+//             companion.client.forEach(cl => {
+//                 id.push(cl.id)
+//             })
 
-            Client.find({clientID: id}, (err, clients) => {
-                if(err) return console.log(err)
+//             Client.find({clientID: id}, (err, clients) => {
+//                 if(err) return console.log(err)
 
-                return res.status(200).json({
-                    title: 'Посылки которые вам надо доставить',
-                    clients,
-                    companion
-                })
-            })
-        }
-    })  
-})
+//                 return res.status(200).json({
+//                     title: 'Посылки которые вам надо доставить',
+//                     clients,
+//                     companion
+//                 })
+//             })
+//         }
+//     })  
+// })
 
-app.post('/api/companion-history/:clientOrderID/:companionUserID', async(req, res) => {
+// app.post('/api/companion-history/:clientOrderID/:companionUserID', async(req, res) => {
     
-    Client.findOne({_id: req.params.clientOrderID}, (err, client) => {
-        if(err) return console.log(err)
+//     Client.findOne({_id: req.params.clientOrderID}, (err, client) => {
+//         if(err) return console.log(err)
         
-        Client.updateOne({_id: req.params.clientOrderID}, {$set: {'companion.deliveryStatus.isDelivered.text': 'Посылка доставлена', 'companion.deliverStatus.isDelivered.status': true}}, (err) => {
-            if (err) return console.log(err)
-        })
+//         Client.updateOne({_id: req.params.clientOrderID}, {$set: {'companion.deliveryStatus.isDelivered.text': 'Посылка доставлена', 'companion.deliverStatus.isDelivered.status': true}}, (err) => {
+//             if (err) return console.log(err)
+//         })
 
-        Companion.findOneAndUpdate({companionID: req.params.companionUserID, "client.id": client.clientID},
-            {$set: {"client.$.deliveryStatus.isDone.text": "Посылку доставил", "client.$.deliveryStatus.isDone.status": true}} , (err) => {
-                if(err) return console.log(err)
+//         Companion.findOneAndUpdate({companionID: req.params.companionUserID, "client.id": client.clientID},
+//             {$set: {"client.$.deliveryStatus.isDone.text": "Посылку доставил", "client.$.deliveryStatus.isDone.status": true}} , (err) => {
+//                 if(err) return console.log(err)
 
-                return res.status(200).json({
-                    title: 'Вы успешно доставили посылку'
-                })
-        })
-    })
-})
+//                 return res.status(200).json({
+//                     title: 'Вы успешно доставили посылку'
+//                 })
+//         })
+//     })
+// })
 
 // ROUTES FOR CLIENT /HISTORY
 app.get('/api/history/:userid', async (req, res) => {
@@ -538,6 +541,16 @@ app.get('/api/history/:userid', async (req, res) => {
         return res.status(200).json({
             msg: "Your orders is here",
             clients
+        })
+    })
+})
+
+app.delete('/api/history/:userid/:orderid', async (req, res) => {
+    await Client.deleteOne({_id: req.params.orderid, clientID:  req.params.userid}, (err) => {
+        if(err) return console.log(err)
+
+        return res.status(200).json({
+            title: 'Вы удалили этот заказ'
         })
     })
 })

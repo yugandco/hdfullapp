@@ -18,7 +18,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdown-option">
                                         <li><a class="dropdown-item" href="#">Изменить заявку</a></li>
-                                        <li><a class="dropdown-item" href="#">Удалить заявку</a></li>
+                                        <li><a @click='deleteOrder(order._id)' class="dropdown-item" href="#">Удалить заявку</a></li>
                                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                                     </ul>
                                 </div>
@@ -40,7 +40,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <!--  -->
-                                            <button @click='openAppFromMe(order._id)' class='btn btn-light btn-block'>Меня <span class='badge bg-danger' style=''></span></button>
+                                            <button @click='openAppFromMe(order._id)' class='btn btn-outline-secondary btn-block'>Меня <span class='badge bg-danger' style=''></span></button>
                                         </div>
                                         <div class="col-6">
                                             <!--  -->
@@ -80,6 +80,20 @@ export default {
         }
     },
     methods: {
+        deleteOrder(id) {
+            const userid = localStorage.getItem('userID')
+
+            axios.delete(`api/history/${userid}/${id}`, null)
+                .then(res => {
+                    if (res.status === 200) {
+                        let arr = this.orders.filter(data => {
+                            return (data._id !== id)
+                        })
+
+                        this.orders = arr
+                    }
+                })
+        },
         openAppFromMe(id) {
             console.log(id)
             localStorage.setItem('clientOrderID', id)

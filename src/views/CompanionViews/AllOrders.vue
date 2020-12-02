@@ -1,7 +1,7 @@
 <template>
 <div class='allorders mt-5 pt-4'>
     <div class="container-fluid">
-        <div class="allorders__title h1 font-weight-bold mb-3 border-bottom">Все заказы</div>
+        <div class="allorders__title h1 font-weight-bold mb-3 border-bottom pb-2">Все заказы</div>
         <div class="allorders__body">
             <div class="row gx-2">
                 <div class="col">

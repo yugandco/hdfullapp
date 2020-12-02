@@ -31,7 +31,8 @@ export default {
     },
     data() {
         return {
-            companions: []
+            companions: [],
+            clientOrderID: ''
         }
     },
     mounted() {
@@ -44,13 +45,13 @@ export default {
         },
         submitApplication(id) {
             const userid = localStorage.getItem('userID')
-            const orderid = id
+            const orderid = this.clientOrderID
             console.log(orderid)
-            axios.post(`api/show-companions/${id}/${userid}`, null)
+            axios.post(`api/show-companions/${orderid}/${userid}/${id}`, null)
                 .then(res => {
                     if (res.status === 200) {
                         let filterCompanions = this.companions.filter(companion => {
-                            return (companion._id !== orderid)
+                            return (companion._id !== id)
                         })
                         this.companions = filterCompanions
                     }
@@ -74,9 +75,10 @@ export default {
             console.log(replacedPackageType)
             axios.get(`api/show-companions/${search.from}/${search.to}/${search.date}/${search.price}/${replacedPackageType}/${search.transport}`)
                 .then(res => {
-                    res.status === 200 ? console.log(res) : console.log('Error can not get companions Data')
+                    res.status === 200 ? console.log(res.data.client._id) : console.log('Error can not get companions Data')
+                    this.clientOrderID = res.data.client._id
                     const datas = res.data.companions
-                    console.log(datas)
+
                     datas.forEach(data => {
                         this.companions.push(data)
                     })
